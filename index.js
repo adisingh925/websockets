@@ -14,11 +14,13 @@ const wss = new WebSocket.Server({ server });
 wss.on("connection", (ws) => {
   //connection is up, let's add a simple simple event
   ws.on("message", (message) => {
-    ws.send(JSON.stringify({msg: `${message}`, success: true}));
+    wss.clients.forEach((element) => {
+      element.send(JSON.stringify({ msg: `${message}`, success: true }));
+    });
   });
-  
+
   //send immediatly a feedback to the incoming connection
-  ws.send(JSON.stringify({success: true}));
+  ws.send(JSON.stringify({ success: true }));
 });
 
 //start our server
