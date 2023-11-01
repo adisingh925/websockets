@@ -1,12 +1,22 @@
 const express = require("express");
 const http = require("http");
+const https = require("https");
 const WebSocket = require("ws");
+const cors = require("cors");
+const fs = require("fs");
 
 const app = express();
 const port = 60001;
 
-//initialize a simple http server
-const server = http.createServer(app);
+app.use(cors());
+
+const server = new https.createServer(
+  {
+    cert: fs.readFileSync("ssl/certificate.cer"),
+    key: fs.readFileSync("ssl/private_key.key"),
+  },
+  app
+);
 
 //initialize the WebSocket server instance
 const wss = new WebSocket.Server({ server });
